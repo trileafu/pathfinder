@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,500&display=swap');
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    font-family: 'Lora', 'Times New Roman', Times, serif,
+}
+
+#controls {
+    margin: 2em;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#moves {
+    display: flex;
+}
+
+#input {
+    background-color: oldlace;
+    height: calc(1em + 8px);
+    text-align: right;
+    width: 100%;
+    text-wrap: nowrap;
+    margin-right: 16px;
+    font-size: 2em;
+    scroll-behavior: smooth;
+    padding: 16px;
+}
+
+#dpad {
+    width: fit-content;
+    text-align: center;
+    font-size: 2em;
+    align-self: center;
+    margin-top: 1em;
+}
+
+td {
+    border-radius: .5em;
+}
+
+.tableButton {
+    background-color: orange;
+    user-select: none;
+}
+
+.tableButton:hover {
+    color: white;
+}
+
+.tableButton:active {
+    background-color: orangered;
+}
+
+h1 {
+    font-weight: 500;
+    font-style: italic;
+    font-size: 5em;
+    margin: 0;
+}
+
+#renderer {
+    width: 50%;
+    background-color: black;
+}
+
+#popup {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#win, #lose {
+    position: inherit;
+    background-color: white;
+    padding: 20px;
+    transition: all .5s cubic-bezier(0, 1, 0, 1);
+    scale: 0;
+    border-radius: 16px;
+}
