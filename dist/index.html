@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  <script type="module" crossorigin src="/assets/index-JFaNE3NB.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-b1_Wb8l-.css">
+</head>
+<body>
+    <script>
+        let input = [];
+        let player;
+        let moved = false;
+        const mapName = new URLSearchParams(window.location.search).get('map');
+        let map;
+        document.addEventListener("DOMContentLoaded", function(event) {
+            if(mapName != undefined) {
+                fetch("./level/" + mapName + ".ptf.json").then(res => {
+                    res.json().then(json => {
+                        map = json;
+                        player = gameStart(map);
+                    })
+                })
+            }
+        });
+        document.addEventListener("keydown", function(event) {
+            if(event.repeat) return;
+            console.log(event.key)
+            switch(event.key) {
+                case "W":
+                case "w":
+                    addInput(input, 0, moved, map.limit);
+                    break;
+                case "D":
+                case "d":
+                    addInput(input, 1, moved, map.limit);
+                    break;
+                case "S":
+                case "s":
+                    addInput(input, 2, moved, map.limit);
+                    break;
+                case "A":
+                case "a":
+                    addInput(input, 3, moved, map.limit);
+                    break;
+                case "R":
+                case "r":
+                    resetInput(input, moved);
+                    break;
+                case "Enter":
+                    if(document.getElementById("popup").style.zIndex != -1) location.reload();
+                    gameEnd();
+                    break;
+            }
+        })
+        function gameEnd() {
+            playerMove(input, player, map.blocks, moved);
+            moved = true;
+        }
+    </script>
+    <section id="renderer">
+        
+    </section>
+    <section id="controls">
+        <h1>Pathfinder</h1>
+        <div id="moves">
+            <div id="input"></div>
+            <button id="confirm" onclick="gameEnd()">Confirm</button>
+        </div>
+        <table id="dpad" class="desktop">
+            <tr>
+                <td></td>
+                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
+            </tr>
+            <tr>
+                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)">a</td>
+                <td></td>
+                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">s</td>
+                <td style="width: 2em; height: 2em;"></td>
+                <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)">d</td>
+            </tr>
+        </table>
+    </section>
+        <table id="dpad" class="mobile">
+            <tr>
+                <td></td>
+                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
+            </tr>
+            <tr>
+                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)">a</td>
+                <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
+                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">s</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)">d</td>
+            </tr>
+        </table>
+    </section>
+    <section id="popup" style="z-index: -1;">
+        <div id="win">
+            <h1>menang</h1>
+            <button onclick="location.reload()">lanjut</button>
+        </div>
+        <div id="lose">
+            <h1>kalah</h1>
+            <button onclick="location.reload()">coba lagi</button>
+        </div>
+    </section>
+</body>
+</html>

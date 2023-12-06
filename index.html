@@ -68,7 +68,7 @@
             <div id="input"></div>
             <button id="confirm" onclick="gameEnd()">Confirm</button>
         </div>
-        <table id="dpad">
+        <table id="dpad" class="desktop">
             <tr>
                 <td></td>
                 <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
@@ -79,6 +79,22 @@
                 <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">s</td>
                 <td style="width: 2em; height: 2em;"></td>
                 <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)">d</td>
+            </tr>
+        </table>
+    </section>
+        <table id="dpad" class="mobile">
+            <tr>
+                <td></td>
+                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
+            </tr>
+            <tr>
+                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)">a</td>
+                <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
+                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">s</td>
             </tr>
             <tr>
                 <td></td>
