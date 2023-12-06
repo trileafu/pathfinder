@@ -97,7 +97,7 @@ h1 {
         flex-direction: column;
         width: 100vw;
     }
-    h1 {
+    #controls > h1 {
         font-size: 2em;
         position: absolute;
         top: .5em;
