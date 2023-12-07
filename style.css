@@ -29,6 +29,7 @@ body {
     font-size: 2em;
     scroll-behavior: smooth;
     padding: 16px;
+    transition: color 500ms ease-out;
 }
 
 #dpad {
@@ -90,6 +91,11 @@ h1 {
 
 .mobile {
     display: none;
+}
+
+.overflow {
+    background-color: red;
+    color: white;
 }
 
 @media (max-width: 1308px) {

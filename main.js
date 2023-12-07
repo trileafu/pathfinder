@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 const scene = new THREE.Scene();
 const element = document.getElementById('renderer');
-const camera = new THREE.PerspectiveCamera(40, element.getBoundingClientRect().width / element.getBoundingClientRect().height, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(60, element.getBoundingClientRect().width / element.getBoundingClientRect().height, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(element.getBoundingClientRect().width, element.getBoundingClientRect().height);
@@ -18,6 +18,20 @@ function animate(){
 	renderer.render(scene, camera);
     let inputText = "";
     input.forEach((step, index) => {
+        switch(step) {
+            case 0:
+                step = "˄"
+                break;
+            case 1:
+                step = "˃"
+                break;
+            case 3:
+                step = "˂"
+                break;
+            case 2:
+                step = "˅"
+                break;
+        }
         if(index == currentInput) inputText += `<b>${step}</b> `
         else inputText += `${step} `
     });
@@ -126,6 +140,7 @@ function generateWall(x, y, fside, findex){
 }
 
 function generatePlane(x, y, fside, findex){
+    console.log("X" + x)
     const geometry = new THREE.PlaneGeometry(x, y);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide, roughness: 0 });
     const plane = new THREE.Mesh(geometry, material);
@@ -318,7 +333,14 @@ window.gameStart = gameStart;
 function addInput(input, direction, moved, limit) {
     if(moved) return;
     document.getElementById("input").scrollLeft += 100000000000000;
-    if(input.length >= limit) return;
+    if(input.length >= limit) {
+        document.getElementById("input").classList.remove("overflow");
+        document.getElementById("input").classList.add("overflow");
+        setTimeout(() => {
+            document.getElementById("input").classList.remove("overflow");
+        }, 500);
+        return;
+    };
     input.push(direction);
 }
 window.addInput = addInput;
