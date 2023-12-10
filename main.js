@@ -1,15 +1,29 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
 const element = document.getElementById('renderer');
 const camera = new THREE.PerspectiveCamera(60, element.getBoundingClientRect().width / element.getBoundingClientRect().height, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.shadowMap.enabled = true;
+renderer.setPixelRatio(window.devicePixelRatio * 2);
 renderer.setSize(element.getBoundingClientRect().width, element.getBoundingClientRect().height);
 element.appendChild(renderer.domElement);
 
-const light = new THREE.HemisphereLight( 0xffffbb, 0x000000, 1 );
-scene.add( light ); 
+const light = new THREE.DirectionalLight('white', 8);
+const ambientLight = new THREE.AmbientLight('white', 2);
+light.castShadow = true;
+light.shadowDarkness = 0.7;
+scene.add(light, ambientLight); 
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.minPolarAngle = Math.PI / 3;
+controls.maxPolarAngle = Math.PI / 3 * 2;
+controls.minAzimuthAngle = -Math.PI / 3;
+controls.maxAzimuthAngle = Math.PI / 3;
+
+const textureLoader = new THREE.TextureLoader();
 
 let currentInput = -1;
 
@@ -35,8 +49,9 @@ function animate(){
         if(index == currentInput) inputText += `<b>${step}</b> `
         else inputText += `${step} `
     });
-
+    controls.update();
     document.getElementById('input').innerHTML = inputText;
+    light.position.set(camera.position.x, camera.position.y, camera.position.z);
 }
 
 animate();
@@ -53,7 +68,7 @@ function onWindowResize(){
 }
 
 function generateWall(x, y, fside, findex){
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const material = new THREE.MeshStandardMaterial({ color: "red" });
     const vertical = new THREE.BoxGeometry( x, .5, 1 );
     const horizontal = new THREE.BoxGeometry( .5, y + 1, 1 );
 
@@ -63,11 +78,13 @@ function generateWall(x, y, fside, findex){
         top1.position.x = (findex) / 2;
         top1.position.y = .25;
         top1.position.z = .5;
+        top1.castShadow = true;
         const top2 = new THREE.Mesh( new THREE.BoxGeometry( x - findex - 1, .5, 1 ), material ); 
         scene.add(top2);
         top2.position.x = x - (x - findex - 1) / 2;
         top2.position.y = .25;
         top2.position.z = .5;
+        top2.castShadow = true;
     }
     else {
         const top = new THREE.Mesh( vertical, material ); 
@@ -75,6 +92,7 @@ function generateWall(x, y, fside, findex){
         top.position.x = x / 2;
         top.position.y = .25;
         top.position.z = .5;
+        top.castShadow = true;
     }
 
     if(fside == 2) {
@@ -83,11 +101,13 @@ function generateWall(x, y, fside, findex){
         bottom1.position.x = (findex) / 2;
         bottom1.position.y = -y - .25;
         bottom1.position.z = .5;
+        bottom1.castShadow = true;
         const bottom2 = new THREE.Mesh( new THREE.BoxGeometry( x - findex - 1, .5, 1 ), material ); 
         scene.add(bottom2);
         bottom2.position.x = x - (x - findex - 1) / 2;
         bottom2.position.y = -y - .25;
         bottom2.position.z = .5;
+        bottom1.castShadow = true;
     }
     else {
         const bottom = new THREE.Mesh( vertical, material ); 
@@ -95,6 +115,7 @@ function generateWall(x, y, fside, findex){
         bottom.position.x = x / 2;
         bottom.position.y = -y - .25;
         bottom.position.z = .5;
+        bottom.castShadow = true;
     }
 
     if(fside == 3) {
@@ -103,11 +124,13 @@ function generateWall(x, y, fside, findex){
         left1.position.x = -.25;
         left1.position.y = -findex / 2 + .25;
         left1.position.z = .5;
+        left1.castShadow = true;
         const left2 = new THREE.Mesh( new THREE.BoxGeometry( .5, y - findex - 1 + .5, 1 ), material ); 
         scene.add(left2);
         left2.position.x = -.25;
         left2.position.y = -y + (y - findex) / 2 - .75;
         left2.position.z = .5;
+        left1.castShadow = true;
     }
     else {
         const left = new THREE.Mesh( horizontal, material ); 
@@ -115,6 +138,7 @@ function generateWall(x, y, fside, findex){
         left.position.x = -.25;
         left.position.y = -y / 2;
         left.position.z = .5;
+        left.castShadow = true;
     }
 
     if(fside == 1) {
@@ -123,11 +147,13 @@ function generateWall(x, y, fside, findex){
         right1.position.x = x + .25;
         right1.position.y = -findex / 2 + .25;
         right1.position.z = .5;
+        right1.castShadow = true;
         const right2 = new THREE.Mesh( new THREE.BoxGeometry( .5, y - findex - 1 + .5, 1 ), material ); 
         scene.add(right2);
         right2.position.x = x + .25;
         right2.position.y = -y + (y - findex) / 2 - .75;
         right2.position.z = .5;
+        right1.castShadow = true;
     }
     else {
         const right = new THREE.Mesh( horizontal, material ); 
@@ -135,6 +161,7 @@ function generateWall(x, y, fside, findex){
         right.position.x = x + .25;
         right.position.y = -y / 2;
         right.position.z = .5;
+        right.castShadow = true;
     }
 
 }
@@ -142,34 +169,40 @@ function generateWall(x, y, fside, findex){
 function generatePlane(x, y, fside, findex){
     console.log("X" + x)
     const geometry = new THREE.PlaneGeometry(x, y);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide, roughness: 0 });
+    const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, side: THREE.DoubleSide, roughness: 0 });
     const plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
+    plane.receiveShadow = true;
     plane.position.x = x / 2;
     plane.position.y = -y / 2;
     camera.position.x = x / 2;
     camera.position.y = Math.min(-10, -x, -y);
     camera.position.z = Math.max(10, x, y);
     camera.lookAt(x / 2, -y / 2, 0);
+    controls.target.set(x / 2, -y / 2, 0.5);
+    controls.saveState();
     generateWall(x, y, fside, findex);
 }
 
 function addCube(x, y){
     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-    const cube = new THREE.Mesh( geometry, material ); 
+    const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+    const cube = new THREE.Mesh( geometry, material );
+    cube.castShadow = true;
     scene.add(cube);
     cube.position.x = x + .5;
     cube.position.y = -y - .5;
     cube.position.z = 0.5;
+    console.log(cube.position);
 }
 
 function addStarting(x, y) {
-    const sphere = new THREE.Mesh( new THREE.SphereGeometry(.5), new THREE.MeshBasicMaterial({ color: 0xff00ff })); 
+    const sphere = new THREE.Mesh( new THREE.SphereGeometry(.5), new THREE.MeshStandardMaterial({ color: 0xff00ff })); 
     scene.add(sphere);
     sphere.position.x = x + .5;
     sphere.position.y = -y - .5;
     sphere.position.z = 0.5;
+    sphere.castShadow = true;
     return sphere;
 }
 
@@ -353,6 +386,8 @@ window.resetInput = resetInput;
 
 async function playerMove(input, object, blocks, moved) {
     if(moved) return;
+    controls.enabled = false;
+    controls.reset();
     for (let i = 0; i < input.length; i++) {
         currentInput = i;
         await move(object, input[i], blocks, map.finish);
