@@ -7,7 +7,6 @@ const camera = new THREE.PerspectiveCamera(60, element.getBoundingClientRect().w
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
-renderer.setPixelRatio(window.devicePixelRatio * 2);
 renderer.setSize(element.getBoundingClientRect().width, element.getBoundingClientRect().height);
 element.appendChild(renderer.domElement);
 
@@ -51,7 +50,7 @@ function animate(){
     });
     controls.update();
     document.getElementById('input').innerHTML = inputText;
-    light.position.set(camera.position.x, camera.position.y, camera.position.z);
+    light.position.set(camera.position.x, camera.position.y + 10, camera.position.z);
 }
 
 animate();
@@ -79,12 +78,14 @@ function generateWall(x, y, fside, findex){
         top1.position.y = .25;
         top1.position.z = .5;
         top1.castShadow = true;
+        top1.receiveShadow = true;
         const top2 = new THREE.Mesh( new THREE.BoxGeometry( x - findex - 1, .5, 1 ), material ); 
         scene.add(top2);
         top2.position.x = x - (x - findex - 1) / 2;
         top2.position.y = .25;
         top2.position.z = .5;
         top2.castShadow = true;
+        top2.receiveShadow = true;
     }
     else {
         const top = new THREE.Mesh( vertical, material ); 
@@ -93,6 +94,7 @@ function generateWall(x, y, fside, findex){
         top.position.y = .25;
         top.position.z = .5;
         top.castShadow = true;
+        top.receiveShadow = true;
     }
 
     if(fside == 2) {
@@ -102,12 +104,14 @@ function generateWall(x, y, fside, findex){
         bottom1.position.y = -y - .25;
         bottom1.position.z = .5;
         bottom1.castShadow = true;
+        bottom1.receiveShadow = true;
         const bottom2 = new THREE.Mesh( new THREE.BoxGeometry( x - findex - 1, .5, 1 ), material ); 
         scene.add(bottom2);
         bottom2.position.x = x - (x - findex - 1) / 2;
         bottom2.position.y = -y - .25;
         bottom2.position.z = .5;
-        bottom1.castShadow = true;
+        bottom2.castShadow = true;
+        bottom2.receiveShadow = true;
     }
     else {
         const bottom = new THREE.Mesh( vertical, material ); 
@@ -116,6 +120,7 @@ function generateWall(x, y, fside, findex){
         bottom.position.y = -y - .25;
         bottom.position.z = .5;
         bottom.castShadow = true;
+        bottom.receiveShadow = true;
     }
 
     if(fside == 3) {
@@ -125,12 +130,14 @@ function generateWall(x, y, fside, findex){
         left1.position.y = -findex / 2 + .25;
         left1.position.z = .5;
         left1.castShadow = true;
+        left1.receiveShadow = true;
         const left2 = new THREE.Mesh( new THREE.BoxGeometry( .5, y - findex - 1 + .5, 1 ), material ); 
         scene.add(left2);
         left2.position.x = -.25;
         left2.position.y = -y + (y - findex) / 2 - .75;
         left2.position.z = .5;
-        left1.castShadow = true;
+        left2.castShadow = true;
+        left2.receiveShadow = true;
     }
     else {
         const left = new THREE.Mesh( horizontal, material ); 
@@ -139,6 +146,7 @@ function generateWall(x, y, fside, findex){
         left.position.y = -y / 2;
         left.position.z = .5;
         left.castShadow = true;
+        left.receiveShadow = true;
     }
 
     if(fside == 1) {
@@ -148,12 +156,14 @@ function generateWall(x, y, fside, findex){
         right1.position.y = -findex / 2 + .25;
         right1.position.z = .5;
         right1.castShadow = true;
+        right1.receiveShadow = true;
         const right2 = new THREE.Mesh( new THREE.BoxGeometry( .5, y - findex - 1 + .5, 1 ), material ); 
         scene.add(right2);
         right2.position.x = x + .25;
         right2.position.y = -y + (y - findex) / 2 - .75;
         right2.position.z = .5;
-        right1.castShadow = true;
+        right2.castShadow = true;
+        right2.receiveShadow = true;
     }
     else {
         const right = new THREE.Mesh( horizontal, material ); 
@@ -162,6 +172,7 @@ function generateWall(x, y, fside, findex){
         right.position.y = -y / 2;
         right.position.z = .5;
         right.castShadow = true;
+        right.receiveShadow = true;
     }
 
 }
@@ -181,6 +192,7 @@ function generatePlane(x, y, fside, findex){
     camera.lookAt(x / 2, -y / 2, 0);
     controls.target.set(x / 2, -y / 2, 0.5);
     controls.saveState();
+    light.target = plane;
     generateWall(x, y, fside, findex);
 }
 
@@ -189,6 +201,7 @@ function addCube(x, y){
     const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
     const cube = new THREE.Mesh( geometry, material );
     cube.castShadow = true;
+    cube.receiveShadow = true;
     scene.add(cube);
     cube.position.x = x + .5;
     cube.position.y = -y - .5;
@@ -203,6 +216,7 @@ function addStarting(x, y) {
     sphere.position.y = -y - .5;
     sphere.position.z = 0.5;
     sphere.castShadow = true;
+    sphere.receiveShadow = true;
     return sphere;
 }
 
