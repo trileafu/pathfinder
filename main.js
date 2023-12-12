@@ -180,7 +180,6 @@ function generateWall(x, y, fside, findex){
 }
 
 function generatePlane(x, y, fside, findex){
-    console.log("X" + x)
     const geometry = new THREE.PlaneGeometry(x, y);
     const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, side: THREE.DoubleSide, roughness: 0 });
     const plane = new THREE.Mesh(geometry, material);
@@ -207,8 +206,8 @@ function addCube(x, y){
     scene.add(cube);
     cube.position.x = x + .5;
     cube.position.y = -y - .5;
-    cube.position.z = 0.5;
-    console.log(cube.position);
+    cube.position.z = -2;
+    animatePosition(cube, 0.5, 4);
 }
 
 function addStarting(x, y) {
@@ -223,16 +222,17 @@ function addStarting(x, y) {
 }
 
 function getMove(row, left, position) {
-    console.log(row);
     if(left) {
         if(position == 0) {
             return 0;
         }
         for(let pos = position - 1; pos >= 0; pos--) {
-            if(pos == 0 && row[pos] == 0) {
-                return 0;
+            if(pos == 0) {
+                if(row[pos] == 0 || row[pos] == 2) {
+                    return 0;
+                }
             }
-            if(row[pos] != 0) {
+            if(row[pos] == 1) {
                 return pos + 1;
             }
         }
@@ -242,10 +242,12 @@ function getMove(row, left, position) {
             return row.length - 1;
         }
         for(let pos = position + 1; pos < row.length; pos++) {
-            if(pos == row.length - 1 && row[pos] == 0) {
-                return row.length - 1;
+            if(pos == row.length - 1) {
+                if(row[pos] == 0 || row[pos] == 2) {
+                    return row.length - 1;
+                }
             }
-            if(row[pos] != 0) {
+            if(row[pos] == 1) {
                 return pos - 1;
             }
         }
@@ -264,44 +266,43 @@ function getColumn(blocks, cindex) {
 
 async function move(object, direction, blocks, finish) {
     return new Promise(async resolve => {
-        console.log(`x${object.position.x - .5} y${-object.position.y - .5}`)
         switch(direction) {
             case 0:
                 if(finish.side == 0 && finish.index == object.position.x - .5) {
-                    await animatePosition(object, 1.25, 0);
+                    await animatePosition(object, 1.25, 0, blocks);
                     gameOver(true);
                 }
-                await animatePosition(object, -getMove(getColumn(blocks, object.position.x - .5), true, -object.position.y - .5) - .5, 0);
+                await animatePosition(object, -getMove(getColumn(blocks, object.position.x - .5), true, -object.position.y - .5) - .5, 0, blocks);
                 setTimeout(() => {
                     resolve();
                 }, 500);
                 break;
             case 1:
                 if(finish.side == 1 && finish.index == -object.position.y - .5) {
-                    await animatePosition(object, blocks[0].length + 1.25, 1);
+                    await animatePosition(object, blocks[0].length + 1.25, 1, blocks);
                     gameOver(true);
                 }
-                await animatePosition(object, getMove(blocks[-object.position.y - .5], false, object.position.x - .5) + .5, 1);
+                await animatePosition(object, getMove(blocks[-object.position.y - .5], false, object.position.x - .5) + .5, 1, blocks);
                 setTimeout(() => {
                     resolve();
                 }, 500);
                 break;
             case 2:
                 if(finish.side == 2 && finish.index == object.position.x - .5) {
-                    await animatePosition(object, -blocks.length - 1.25, 2);
+                    await animatePosition(object, -blocks.length - 1.25, 2, blocks);
                     gameOver(true);
                 }
-                await animatePosition(object, -getMove(getColumn(blocks, object.position.x - .5), false, -object.position.y - .5) - .5, 2);
+                await animatePosition(object, -getMove(getColumn(blocks, object.position.x - .5), false, -object.position.y - .5) - .5, 2, blocks);
                 setTimeout(() => {
                     resolve();
                 }, 500);
                 break;
             case 3:
                 if(finish.side == 3 && finish.index == -object.position.y - .5) {
-                    await animatePosition(object, -1.25, 3);
+                    await animatePosition(object, -1.25, 3, blocks);
                     gameOver(true);
                 }
-                await animatePosition(object, getMove(blocks[-object.position.y - .5], true, object.position.x - .5) + .5, 3);
+                await animatePosition(object, getMove(blocks[-object.position.y - .5], true, object.position.x - .5) + .5, 3, blocks);
                 setTimeout(() => {
                     resolve();
                 }, 500);
@@ -309,7 +310,7 @@ async function move(object, direction, blocks, finish) {
     });
 }
 
-async function animatePosition(object, target, direction) {
+async function animatePosition(object, target, direction, blocks) {
     return new Promise(resolve => {
         let loop;
         switch(direction) {
@@ -317,6 +318,7 @@ async function animatePosition(object, target, direction) {
                 loop = setInterval(() => {
                     if(object.position.y < target) {
                         object.position.y += 0.1;
+                        tickBlock(-Math.ceil(object.position.y), Math.ceil(object.position.x) - 1, blocks);
                     }
                     else {
                         object.position.y = target;
@@ -329,6 +331,7 @@ async function animatePosition(object, target, direction) {
                 loop = setInterval(() => {
                     if(object.position.x < target) {
                         object.position.x += 0.1;
+                        tickBlock(-Math.ceil(object.position.y), Math.ceil(object.position.x) - 1, blocks);
                     }
                     else {
                         object.position.x = target;
@@ -340,8 +343,8 @@ async function animatePosition(object, target, direction) {
             case 2:
                 loop = setInterval(() => {
                     if(object.position.y > target) {
-                        console.log(object.position.y)
                         object.position.y -= 0.1;
+                        tickBlock(-Math.ceil(object.position.y), Math.ceil(object.position.x) - 1, blocks);
                     }
                     else {
                         object.position.y = target;
@@ -354,6 +357,7 @@ async function animatePosition(object, target, direction) {
                 loop = setInterval(() => {
                     if(object.position.x > target) {
                         object.position.x -= 0.1;
+                        tickBlock(-Math.ceil(object.position.y), Math.ceil(object.position.x) - 1, blocks);
                     }
                     else {
                         object.position.x = target;
@@ -362,6 +366,17 @@ async function animatePosition(object, target, direction) {
                     }
                 }, 20);
                 break;
+            case 4:
+                loop = setInterval(() => {
+                    if(object.position.z <= target) {
+                        object.position.z += 0.1;
+                    }
+                    else {
+                        object.position.z = target;
+                        clearInterval(loop);
+                        resolve();
+                    }
+                }, 20);
         }
     });
 }
@@ -372,6 +387,9 @@ function gameStart(map) {
         row.forEach((block, bi) => {
             if(block == 1) {
                 addCube(bi, ri);
+            }
+            if(block == 2) {
+                addMarker(bi, ri);
             }
         })
     })
@@ -426,4 +444,26 @@ function gameOver(win) {
     else {
         document.getElementById("lose").style.scale = 1;
     }
+}
+
+function tickBlock(x, y, blocks, index) {
+    console.log(`${x} ${y} = ${blocks[x][y]}`);
+    if(blocks[x][y] == 2){
+        addCube(y, x);
+        blocks[x][y] = 1;
+        console.log(blocks);
+    }
+}
+
+function addMarker(x, y){
+    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+    const cube = new THREE.Mesh( geometry, material );
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    scene.add(cube);
+    cube.position.x = x + .5;
+    cube.position.y = -y - .5;
+    cube.position.z = -2;
+    animatePosition(cube, -0.4, 4);
 }

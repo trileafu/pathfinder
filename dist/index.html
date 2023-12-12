@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-  <script type="module" crossorigin src="./assets/index-ZMIqtZ25.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-yFSkeIG7.css">
+    <title>Document</title>
+  <script type="module" crossorigin src="/assets/index-63yzh_lv.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-QHCX4HFo.css">
 </head>
-<body>
-
+<body>
     <script>
         let input = [];
         let player;
@@ -18,6 +16,7 @@
         let map;
         document.addEventListener("DOMContentLoaded", function(event) {
             if(mapName != undefined) {
+                document.getElementById("gameplay").style.display = "block";
                 fetch("./level/" + mapName + ".ptf.json").then(res => {
                     res.json().then(json => {
                         map = json;
@@ -25,10 +24,12 @@
                     })
                 })
             }
+            else {
+                document.getElementById("start").style.display = "block";
+            }
         });
         document.addEventListener("keydown", function(event) {
             if(event.repeat) return;
-            console.log(event.key)
             switch(event.key) {
                 case "W":
                 case "w":
@@ -65,44 +66,57 @@
         
     </section>
     <section id="controls">
-        <h1>Pathfinder</h1>
-        <div id="moves">
-            <div id="input"></div>
-            <button id="confirm" onclick="gameEnd()">Confirm</button>
+        <div id="gameplay">
+            <h1>Pathfinder</h1>
+            <div id="moves">
+                <div id="input"></div>
+                <button id="confirm" onclick="gameEnd()">Confirm</button>
+            </div>
+            <table id="dpad" class="desktop">
+                <tr>
+                    <td></td>
+                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
+                </tr>
+                <tr>
+                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)">a</td>
+                    <td></td>
+                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">d</td>
+                    <td style="width: 2em; height: 2em;"></td>
+                    <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)">s</td>
+                </tr>
+            </table>
+            <table id="dpad" class="mobile">
+                <tr>
+                    <td></td>
+                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
+                </tr>
+                <tr>
+                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)">a</td>
+                    <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
+                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">d</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)">s</td>
+                </tr>
+            </table>
         </div>
-        <table id="dpad" class="desktop">
-            <tr>
-                <td></td>
-                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
-            </tr>
-            <tr>
-                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)">a</td>
-                <td></td>
-                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">d</td>
-                <td style="width: 2em; height: 2em;"></td>
-                <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)">s</td>
-            </tr>
-        </table>
-    </section>
-        <table id="dpad" class="mobile">
-            <tr>
-                <td></td>
-                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
-            </tr>
-            <tr>
-                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)">a</td>
-                <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
-                <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">d</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)">s</td>
-            </tr>
-        </table>
+        <div id="start">
+            <h1>Pathfinder</h1>
+            <h2>pilih level</h2>
+            <ul>
+                <li>
+                    <a href="./?map=test">test</a>
+                </li>
+                <li>
+                    <a href="./?map=susahbanget">susahbanget</a>
+                </li>
+            </ul>
+        </div>
     </section>
     <section id="popup" style="z-index: -1;">
         <div id="win">

@@ -8,6 +8,10 @@ body {
     user-select: none;
 }
 
+#gameplay, #start {
+    display: none;
+}
+
 b {
     font-weight: 700;
 }
