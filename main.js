@@ -14,6 +14,8 @@ const light = new THREE.DirectionalLight('white', 8);
 const ambientLight = new THREE.AmbientLight('white', 2);
 light.castShadow = true;
 light.shadowDarkness = 0.7;
+light.shadow.mapSize.width = 2048;
+light.shadow.mapSize.height = 2048;
 scene.add(light, ambientLight); 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;

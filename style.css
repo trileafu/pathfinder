@@ -1,10 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,700;1,400;1,500;1,700&display=swap');
 
 body {
     margin: 0;
     height: 100svh;
     display: flex;
-    font-family: 'Lora', 'Times New Roman', Times, serif,
+    font-family: 'Lora', 'Times New Roman', Times, serif;
+    user-select: none;
+}
+
+b {
+    font-weight: 700;
 }
 
 #controls {
@@ -46,7 +51,6 @@ td {
 
 .tableButton {
     background-color: orange;
-    user-select: none;
 }
 
 .tableButton:hover {
