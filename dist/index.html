@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-  <script type="module" crossorigin src="./assets/index-9-RwW4lO.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-vOsP4Pbv.css">
+    <title>Document</title>
+  <script type="module" crossorigin src="/assets/index-LZHmWXys.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-YndvRqvY.css">
 </head>
-<body>
-
+<body>
     <script>
         let input = [];
         let player;
@@ -56,8 +54,17 @@
                     resetInput(input, moved);
                     break;
                 case "Enter":
-                    if(document.getElementById("popup").style.zIndex != -1) location.reload();
-                    gameEnd();
+                    if(document.getElementById("lose").style.scale != 1){
+                        if(document.getElementById("win").style.scale != 1) {
+                            return gameEnd();
+                        }
+                        else {
+                            return nextLevel();
+                        }
+                    }
+                    else if(document.getElementById("win").style.scale != 1){
+                        return location.reload();
+                    }
                     break;
             }
         })
