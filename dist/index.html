@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-  <script type="module" crossorigin src="/assets/index-9-RwW4lO.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-vOsP4Pbv.css">
+    <title>Document</title>
+
+  <script type="module" crossorigin src="./assets/index-9-RwW4lO.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-vOsP4Pbv.css">
 </head>
-<body>
+<body>
+
     <script>
         let input = [];
         let player;
@@ -65,10 +67,10 @@
         }
         function nextLevel() {
             if(map.next) {
-                location.href = `/?map=${map.next}`;
+                location.href = `./?map=${map.next}`;
             }
             else {
-                location.href = '/';
+                location.href = './';
             }
         }
     </script>

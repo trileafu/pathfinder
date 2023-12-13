@@ -7,6 +7,7 @@ body {
     display: flex;
     font-family: 'Lora', 'Times New Roman', Times, serif;
     user-select: none;
+    background-color: black;
 }
 
 #gameplay, #start {
@@ -26,16 +27,28 @@ body {
     }
 }
 
+@keyframes fade {
+    from {
+        opacity: 0;
+        scale: 0.8;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
 b {
     font-weight: 700;
 }
 
 #controls {
-    margin: 2em;
+    padding: 2em;
     width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: white;
 }
 
 #moves {
@@ -66,6 +79,7 @@ b {
 
 td {
     border-radius: .5em;
+    animation: fade 1s cubic-bezier(0, 1, 0, 1) forwards;
 }
 
 .tableButton {
@@ -92,6 +106,8 @@ h1 {
 #renderer {
     width: 50%;
     background-color: black;
+    animation: fade 1s cubic-bezier(0, 1, 0, 1) .5s forwards;
+    opacity: 0;
 }
 
 #popup {
