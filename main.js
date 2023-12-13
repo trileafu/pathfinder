@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
 const element = document.getElementById('renderer');
-const camera = new THREE.PerspectiveCamera(60, element.getBoundingClientRect().width / element.getBoundingClientRect().height, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(70, element.getBoundingClientRect().width / element.getBoundingClientRect().height, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
@@ -211,7 +211,7 @@ function addCube(x, y){
 }
 
 function addStarting(x, y) {
-    const sphere = new THREE.Mesh( new THREE.SphereGeometry(.5), new THREE.MeshStandardMaterial({ color: 0xff00ff })); 
+    const sphere = new THREE.Mesh( new THREE.SphereGeometry(.4), new THREE.MeshStandardMaterial({ color: 0xff00ff })); 
     scene.add(sphere);
     sphere.position.x = x + .5;
     sphere.position.y = -y - .5;
