@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-  <script type="module" crossorigin src="./assets/index-LZHmWXys.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-YndvRqvY.css">
+  <script type="module" crossorigin src="./assets/index-H275xixP.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-7Bf016Sf.css">
 </head>
 <body>
 
@@ -24,6 +24,8 @@
                     res.json().then(json => {
                         map = json;
                         player = gameStart(map);
+                        document.getElementById("steps").innerHTML = `Selesaikan dalam ${map.limit} langkah`;
+                        document.getElementById("steps-desktop").innerHTML = `Selesaikan dalam ${map.limit} langkah`;
                     })
                 })
             }
@@ -88,48 +90,51 @@
     </section>
     <section id="controls">
         <h1 class="mobile">Pathfinder</h1>
+        <h2 class="mobile" id="steps"></h2>
         <div id="gameplay">
             <h1 class="desktop">Pathfinder</h1>
+            <h2 class="desktop" id="steps-desktop">Selesaikan</h2>
             <div id="moves">
                 <div id="input"></div>
-                <button id="confirm" onclick="gameEnd()">Confirm</button>
+                <button id="confirm" onclick="gameEnd()"><span class="icon-enter" style="font-size: 4em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></button>
             </div>
             <table id="dpad" class="desktop">
                 <tr>
                     <td></td>
-                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
+                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)"><span class="icon-w" style="font-size: 1.5em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
                 </tr>
                 <tr>
-                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)">a</td>
+                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)"><span class="icon-a" style="font-size: 1.5em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
                     <td></td>
-                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">d</td>
+                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)"><span class="icon-d" style="font-size: 1.5em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
                     <td style="width: 2em; height: 2em;"></td>
-                    <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
+                    <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><span class="icon-r" style="font-size: 4em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)">s</td>
+                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)"><span class="icon-s" style="font-size: 1.5em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
                 </tr>
             </table>
             <table id="dpad" class="mobile">
                 <tr>
                     <td></td>
-                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)">w</td>
+                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 0, moved, map.limit)"><span class="icon-w" style="font-size: 1.5em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
                 </tr>
                 <tr>
-                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)">a</td>
-                    <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><u>r</u>eset</td>
-                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)">d</td>
+                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 3, moved, map.limit)"><span class="icon-a" style="font-size: 1.5em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
+                    <td style="width: 5em; height: 5em; border-radius: 100%;" class="tableButton" onclick="resetInput(input, moved)"><span class="icon-r" style="font-size: 4em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
+                    <td style="width: 2em; height: 5em;" class="tableButton" onclick="addInput(input, 1, moved, map.limit)"><span class="icon-d" style="font-size: 1.5em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)">s</td>
+                    <td style="width: 5em; height: 2em;" class="tableButton" onclick="addInput(input, 2, moved, map.limit)"><span class="icon-s" style="font-size: 1.5em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></td>
                 </tr>
             </table>
         </div>
         <div id="start">
             <h1 class="desktop">Pathfinder</h1>
-            <h2>pilih level</h2>
+            <h1 class="mobile">pilih level</h1>
+            <h1 class="desktop"><b>pilih level</b></h1>
             <ul>
                 <li>
                     <a href="./?map=test">test</a>
@@ -149,11 +154,11 @@
     <section id="popup" style="z-index: -1;">
         <div id="win">
             <h1>menang</h1>
-            <button onclick="nextLevel()">lanjut</button>
+            <button onclick="nextLevel()"><span class="icon-enter2" style="font-size: 4em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></button>
         </div>
         <div id="lose">
             <h1>kalah</h1>
-            <button onclick="location.reload()">coba lagi</button>
+            <button onclick="location.reload()"><span class="icon-enter3" style="font-size: 4em;"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span></button>
         </div>
     </section>
 </body>

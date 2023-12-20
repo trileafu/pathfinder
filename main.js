@@ -10,8 +10,8 @@ renderer.shadowMap.enabled = true;
 renderer.setSize(element.getBoundingClientRect().width, element.getBoundingClientRect().height);
 element.appendChild(renderer.domElement);
 
-const light = new THREE.DirectionalLight('white', 8);
-const ambientLight = new THREE.AmbientLight('white', 2);
+const light = new THREE.DirectionalLight('white', 2);
+const ambientLight = new THREE.AmbientLight('white', 1);
 light.castShadow = true;
 light.shadowDarkness = 0.7;
 light.shadow.mapSize.width = 2048;
@@ -35,16 +35,16 @@ function animate(){
     input.forEach((step, index) => {
         switch(step) {
             case 0:
-                step = "˄"
+                step = "0"
                 break;
             case 1:
-                step = "˃"
+                step = "1"
                 break;
             case 3:
-                step = "˂"
+                step = "3"
                 break;
             case 2:
-                step = "˅"
+                step = "2"
                 break;
         }
         if(index == currentInput) inputText += `<b>${step}</b> `
@@ -69,7 +69,8 @@ function onWindowResize(){
 }
 
 function generateWall(x, y, fside, findex){
-    const material = new THREE.MeshStandardMaterial({ color: "red" });
+    const texture = textureLoader.load("./textures/wall.png");
+    const material = new THREE.MeshStandardMaterial({ map: texture });
     const vertical = new THREE.BoxGeometry( x, .5, 1 );
     const horizontal = new THREE.BoxGeometry( .5, y + 1, 1 );
 
@@ -180,8 +181,9 @@ function generateWall(x, y, fside, findex){
 }
 
 function generatePlane(x, y, fside, findex){
+    const texture = textureLoader.load("./textures/floor.png");
     const geometry = new THREE.PlaneGeometry(x, y);
-    const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, side: THREE.DoubleSide, roughness: 0 });
+    const material = new THREE.MeshStandardMaterial({ map: texture, side: THREE.DoubleSide, roughness: 0 });
     const plane = new THREE.Mesh(geometry, material);
     scene.add(plane);
     plane.receiveShadow = true;
@@ -198,8 +200,9 @@ function generatePlane(x, y, fside, findex){
 }
 
 function addCube(x, y){
+    const texture = textureLoader.load("./textures/block.jpg");
     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+    const material = new THREE.MeshStandardMaterial({ map: texture });
     const cube = new THREE.Mesh( geometry, material );
     cube.castShadow = true;
     cube.receiveShadow = true;
@@ -211,7 +214,8 @@ function addCube(x, y){
 }
 
 function addStarting(x, y) {
-    const sphere = new THREE.Mesh( new THREE.SphereGeometry(.4), new THREE.MeshStandardMaterial({ color: 0xff00ff })); 
+    const texture = textureLoader.load("./textures/ball.jpg");
+    const sphere = new THREE.Mesh( new THREE.SphereGeometry(.4), new THREE.MeshStandardMaterial({ map: texture })); 
     scene.add(sphere);
     sphere.position.x = x + .5;
     sphere.position.y = -y - .5;
@@ -317,7 +321,7 @@ async function animatePosition(object, target, direction, blocks) {
             case 0:
                 loop = setInterval(() => {
                     if(object.position.y < target) {
-                        object.position.y += 0.1;
+                        object.position.y += .1;
                         tickBlock(-Math.ceil(object.position.y), Math.ceil(object.position.x) - 1, blocks);
                     }
                     else {
@@ -330,7 +334,7 @@ async function animatePosition(object, target, direction, blocks) {
             case 1:
                 loop = setInterval(() => {
                     if(object.position.x < target) {
-                        object.position.x += 0.1;
+                        object.position.x += .1;
                         tickBlock(-Math.ceil(object.position.y), Math.ceil(object.position.x) - 1, blocks);
                     }
                     else {
@@ -343,7 +347,7 @@ async function animatePosition(object, target, direction, blocks) {
             case 2:
                 loop = setInterval(() => {
                     if(object.position.y > target) {
-                        object.position.y -= 0.1;
+                        object.position.y -= .1;
                         tickBlock(-Math.ceil(object.position.y), Math.ceil(object.position.x) - 1, blocks);
                     }
                     else {
@@ -356,7 +360,7 @@ async function animatePosition(object, target, direction, blocks) {
             case 3:
                 loop = setInterval(() => {
                     if(object.position.x > target) {
-                        object.position.x -= 0.1;
+                        object.position.x -= .1;
                         tickBlock(-Math.ceil(object.position.y), Math.ceil(object.position.x) - 1, blocks);
                     }
                     else {
@@ -456,8 +460,9 @@ function tickBlock(x, y, blocks, index) {
 }
 
 function addMarker(x, y){
+    const texture = textureLoader.load("./textures/block.jpg");
     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+    const material = new THREE.MeshStandardMaterial({ map: texture });
     const cube = new THREE.Mesh( geometry, material );
     cube.castShadow = true;
     cube.receiveShadow = true;
