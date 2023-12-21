@@ -226,6 +226,8 @@ function addStarting(x, y) {
 }
 
 function getMove(row, left, position) {
+    console.log(row);
+    console.log('p' + position)
     if(left) {
         if(position == 0) {
             return 0;
@@ -270,9 +272,14 @@ function getColumn(blocks, cindex) {
 
 async function move(object, direction, blocks, finish) {
     return new Promise(async resolve => {
+        let blocked = false;
+        let col, row;
         switch(direction) {
             case 0:
-                if(finish.side == 0 && finish.index == object.position.x - .5) {
+                col = getColumn(blocks, object.position.x - .5).slice(0, -object.position.y - .5);
+                if(col.includes(1)) blocked = true;
+                if(col.includes(2)) blocked = true;
+                if(finish.side == 0 && finish.index == object.position.x - .5 && blocked != true) {
                     await animatePosition(object, 1.25, 0, blocks);
                     gameOver(true);
                 }
@@ -282,16 +289,22 @@ async function move(object, direction, blocks, finish) {
                 }, 500);
                 break;
             case 1:
-                if(finish.side == 1 && finish.index == -object.position.y - .5) {
+                row = blocks[-object.position.y - .5];
+                if(row.includes(1, object.position.x - .5)) blocked = true;
+                if(row.includes(2, object.position.x - .5)) blocked = true;
+                if(finish.side == 1 && finish.index == -object.position.y - .5 && blocked != true) {
                     await animatePosition(object, blocks[0].length + 1.25, 1, blocks);
                     gameOver(true);
                 }
-                await animatePosition(object, getMove(blocks[-object.position.y - .5], false, object.position.x - .5) + .5, 1, blocks);
+                await animatePosition(object, getMove(row, false, object.position.x - .5) + .5, 1, blocks);
                 setTimeout(() => {
                     resolve();
                 }, 500);
                 break;
             case 2:
+                col = getColumn(blocks, object.position.x - .5);
+                if(col.includes(1, -object.position.y - .5)) blocked = true;
+                if(col.includes(2, -object.position.y - .5)) blocked = true;
                 if(finish.side == 2 && finish.index == object.position.x - .5) {
                     await animatePosition(object, -blocks.length - 1.25, 2, blocks);
                     gameOver(true);
@@ -302,6 +315,9 @@ async function move(object, direction, blocks, finish) {
                 }, 500);
                 break;
             case 3:
+                row = blocks[-object.position.y - .5].slice(0, object.position.x - .5);
+                if(row.includes(1, object.position.x - .5)) blocked = true;
+                if(row.includes(2, object.position.x - .5)) blocked = true;
                 if(finish.side == 3 && finish.index == -object.position.y - .5) {
                     await animatePosition(object, -1.25, 3, blocks);
                     gameOver(true);
