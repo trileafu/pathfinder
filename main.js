@@ -305,7 +305,7 @@ async function move(object, direction, blocks, finish) {
                 col = getColumn(blocks, object.position.x - .5);
                 if(col.includes(1, -object.position.y - .5)) blocked = true;
                 if(col.includes(2, -object.position.y - .5)) blocked = true;
-                if(finish.side == 2 && finish.index == object.position.x - .5) {
+                if(finish.side == 2 && finish.index == object.position.x - .5 && blocked != true) {
                     await animatePosition(object, -blocks.length - 1.25, 2, blocks);
                     gameOver(true);
                 }
@@ -318,7 +318,7 @@ async function move(object, direction, blocks, finish) {
                 row = blocks[-object.position.y - .5].slice(0, object.position.x - .5);
                 if(row.includes(1, object.position.x - .5)) blocked = true;
                 if(row.includes(2, object.position.x - .5)) blocked = true;
-                if(finish.side == 3 && finish.index == -object.position.y - .5) {
+                if(finish.side == 3 && finish.index == -object.position.y - .5 && blocked != true) {
                     await animatePosition(object, -1.25, 3, blocks);
                     gameOver(true);
                 }
